@@ -1,78 +1,96 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-        /* Your CSS styles here */
-    </style>
-    <title>Chat App</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    /* Your CSS styles here */
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .chat-container {
+      background-color: #fff;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+      width: 400px;
+      display: flex;
+      flex-direction: column;
+      padding: 20px;
+    }
+
+    .chat {
+      flex-grow: 1;
+      overflow-y: scroll;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      margin-bottom: 10px;
+      max-height: 300px;
+    }
+
+    input[type="text"] {
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      margin-right: 10px;
+    }
+
+    button {
+      padding: 10px 20px;
+      background-color: #0074e4;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+  </style>
+  <title>Chat App</title>
 </head>
 <body>
-    <div class="container">
-        <div class="chat-box">
-            <div class="chat-header">
-                <h2>Chat Room</h2>
-            </div>
-            <div class="friend-name">
-                <label for="friendInput">Friend's Name:</label>
-                <input type="text" id="friendInput" placeholder="Enter friend's name">
-                <button id="setFriendButton">Set</button>
-            </div>
-            <div class="chat-messages" id="chat-messages">
-                <!-- Chat messages will be displayed here -->
-            </div>
-            <div class="chat-input">
-                <input type="text" id="messageInput" placeholder="Type your message...">
-                <button id="sendButton">Send</button>
-            </div>
-        </div>
+  <div class="container">
+    <div class="chat-container">
+      <div class="chat">
+        <div id="chat"></div>
+      </div>
+      <input type="text" id="messageInput" placeholder="Type a message...">
+      <button id="sendButton">Send</button>
     </div>
-    <script>
-        const messageInput = document.getElementById('messageInput');
-        const sendButton = document.getElementById('sendButton');
-        const chatMessages = document.getElementById('chat-messages');
-        const friendInput = document.getElementById('friendInput');
-        const setFriendButton = document.getElementById('setFriendButton');
-        let friendName = '';
+  </div>
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    const socket = io();
 
-        // Function to append a new message to the chat window
-        function appendMessage(sender, message) {
-            const messageElement = document.createElement('div');
-            messageElement.classList.add('message');
-            messageElement.textContent = `${sender}: ${message}`;
-            chatMessages.appendChild(messageElement);
-            // Scroll to the bottom of the chat window
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-        }
+    const chat = document.getElementById('chat');
+    const messageInput = document.getElementById('messageInput');
+    const sendButton = document.getElementById('sendButton');
 
-        // Event listener for the set friend button
-        setFriendButton.addEventListener('click', () => {
-            friendName = friendInput.value.trim();
-            friendInput.value = '';
-        });
+    sendButton.addEventListener('click', () => {
+      const message = messageInput.value.trim();
+      if (message) {
+        appendMessage('You', message);
+        socket.emit('message', message);
+        messageInput.value = '';
+      }
+    });
 
-        // Event listener for the send button
-        sendButton.addEventListener('click', () => {
-            const message = messageInput.value.trim();
-            if (message && friendName) {
-                // Send the message to the server with friendName (you need to implement this)
-                // For now, we'll just append the message to the chat window with your name
-                appendMessage('You', message);
-                // Simulate receiving a message from your friend
-                setTimeout(() => {
-                    const friendMessage = 'Hello, how are you?';
-                    appendMessage(friendName, friendMessage);
-                }, 1000); // Simulate a response after 1 second
-                messageInput.value = '';
-            }
-        });
+    socket.on('message', (message) => {
+      appendMessage('Friend', message);
+    });
 
-        // Example: Simulate a friend's response
-        setTimeout(() => {
-            const friendMessage = 'I am good, thanks!';
-            appendMessage(friendName, friendMessage);
-        }, 2000);
-    </script>
+    function appendMessage(sender, message) {
+      const messageElement = document.createElement('div');
+      messageElement.innerHTML = `<strong>${sender}:</strong> ${message}`;
+      chat.appendChild(messageElement);
+      chat.scrollTop = chat.scrollHeight;
+    }
+  </script>
 </body>
 </html>
