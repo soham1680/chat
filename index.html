@@ -57,24 +57,22 @@
             const message = messageInput.value.trim();
             if (message && friendName) {
                 // Send the message to the server with friendName (you need to implement this)
-                // For now, we'll just append the message to the chat window
+                // For now, we'll just append the message to the chat window with your name
                 appendMessage('You', message);
+                // Simulate receiving a message from your friend
+                setTimeout(() => {
+                    const friendMessage = 'Hello, how are you?';
+                    appendMessage(friendName, friendMessage);
+                }, 1000); // Simulate a response after 1 second
                 messageInput.value = '';
             }
         });
 
-        // Example: Receive a message from the server and display it
-        // Replace this with your actual code for receiving messages
-        setTimeout(() => {
-            const friendMessage = 'Hello, how are you?';
-            appendMessage(friendName, friendMessage);
-        }, 2000);
-
         // Example: Simulate a friend's response
         setTimeout(() => {
-            const responseMessage = 'I am good, thanks!';
-            appendMessage(friendName, responseMessage);
-        }, 4000);
+            const friendMessage = 'I am good, thanks!';
+            appendMessage(friendName, friendMessage);
+        }, 2000);
     </script>
 </body>
 </html>
