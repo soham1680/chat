@@ -14,6 +14,11 @@
             <div class="chat-header">
                 <h2>Chat Room</h2>
             </div>
+            <div class="friend-name">
+                <label for="friendInput">Friend's Name:</label>
+                <input type="text" id="friendInput" placeholder="Enter friend's name">
+                <button id="setFriendButton">Set</button>
+            </div>
             <div class="chat-messages" id="chat-messages">
                 <!-- Chat messages will be displayed here -->
             </div>
@@ -27,6 +32,9 @@
         const messageInput = document.getElementById('messageInput');
         const sendButton = document.getElementById('sendButton');
         const chatMessages = document.getElementById('chat-messages');
+        const friendInput = document.getElementById('friendInput');
+        const setFriendButton = document.getElementById('setFriendButton');
+        let friendName = '';
 
         // Function to append a new message to the chat window
         function appendMessage(sender, message) {
@@ -38,11 +46,17 @@
             chatMessages.scrollTop = chatMessages.scrollHeight;
         }
 
+        // Event listener for the set friend button
+        setFriendButton.addEventListener('click', () => {
+            friendName = friendInput.value.trim();
+            friendInput.value = '';
+        });
+
         // Event listener for the send button
         sendButton.addEventListener('click', () => {
             const message = messageInput.value.trim();
-            if (message) {
-                // Send the message to the server (you need to implement this)
+            if (message && friendName) {
+                // Send the message to the server with friendName (you need to implement this)
                 // For now, we'll just append the message to the chat window
                 appendMessage('You', message);
                 messageInput.value = '';
@@ -53,13 +67,13 @@
         // Replace this with your actual code for receiving messages
         setTimeout(() => {
             const friendMessage = 'Hello, how are you?';
-            appendMessage('Friend', friendMessage);
+            appendMessage(friendName, friendMessage);
         }, 2000);
 
         // Example: Simulate a friend's response
         setTimeout(() => {
             const responseMessage = 'I am good, thanks!';
-            appendMessage('Friend', responseMessage);
+            appendMessage(friendName, responseMessage);
         }, 4000);
     </script>
 </body>
