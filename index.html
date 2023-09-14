@@ -4,76 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-        }
-
-        .container {
-            width: 100%;
-            max-width: 600px;
-            background-color: #fff;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .chat-box {
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
-            overflow: hidden;
-        }
-
-        .chat-header {
-            background-color: #0074e4;
-            color: #fff;
-            padding: 10px;
-            text-align: center;
-        }
-
-        .chat-header h2 {
-            margin: 0;
-        }
-
-        .chat-messages {
-            flex-grow: 1;
-            overflow-y: scroll;
-            padding: 10px;
-        }
-
-        .chat-input {
-            display: flex;
-            align-items: center;
-            padding: 10px;
-            background-color: #f4f4f4;
-        }
-
-        input[type="text"] {
-            flex-grow: 1;
-            padding: 10px;
-            border: none;
-            border-radius: 5px;
-            margin-right: 10px;
-        }
-
-        button {
-            background-color: #0074e4;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            padding: 10px 20px;
-            cursor: pointer;
-            outline: none;
-        }
+        /* Your CSS styles here */
     </style>
     <title>Chat App</title>
 </head>
@@ -98,10 +29,10 @@
         const chatMessages = document.getElementById('chat-messages');
 
         // Function to append a new message to the chat window
-        function appendMessage(message) {
+        function appendMessage(sender, message) {
             const messageElement = document.createElement('div');
             messageElement.classList.add('message');
-            messageElement.textContent = message;
+            messageElement.textContent = `${sender}: ${message}`;
             chatMessages.appendChild(messageElement);
             // Scroll to the bottom of the chat window
             chatMessages.scrollTop = chatMessages.scrollHeight;
@@ -113,7 +44,7 @@
             if (message) {
                 // Send the message to the server (you need to implement this)
                 // For now, we'll just append the message to the chat window
-                appendMessage(`You: ${message}`);
+                appendMessage('You', message);
                 messageInput.value = '';
             }
         });
@@ -121,9 +52,15 @@
         // Example: Receive a message from the server and display it
         // Replace this with your actual code for receiving messages
         setTimeout(() => {
-            const receivedMessage = 'Friend: Hello, how are you?';
-            appendMessage(receivedMessage);
+            const friendMessage = 'Hello, how are you?';
+            appendMessage('Friend', friendMessage);
         }, 2000);
+
+        // Example: Simulate a friend's response
+        setTimeout(() => {
+            const responseMessage = 'I am good, thanks!';
+            appendMessage('Friend', responseMessage);
+        }, 4000);
     </script>
 </body>
 </html>
